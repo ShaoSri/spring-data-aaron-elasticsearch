@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration  scan="true" scanPeriod="60 seconds" debug="false">
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
+    <contextName>logback</contextName>
+    <!-- 记录文件到特定目录 -->
+    <property name="log.path" value="/Users/chang/Desktop/CHLogs/logback.log" />
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>127.0.0.1:4560 </destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- 用户自定义Json字符串，用于向logstash提交额外的自定义属性。可在logstash的input里接收该参数 -->
+            <customFields>{"appName":"message1"}</customFields>
+        </encoder>
+    </appender>
+
+    <!--输出到控制台-->
+  <!--  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        &lt;!&ndash; <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+             <level>ERROR</level>
+         </filter>&ndash;&gt;
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+-->
+    <!--输出到文件-->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logback.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="LOGSTASH"/>
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="file" />
+    </root>
+
+    <!-- logback为 java 中的包
+    <logger name="com.dudu.controller"/>
+    logback.LogbackDemo：类的全路径
+    <logger name="com.dudu.controller.LearnController" level="WARN" additivity="false">
+        <appender-ref ref="console"/>
+    </logger> -->
+</configuration>
