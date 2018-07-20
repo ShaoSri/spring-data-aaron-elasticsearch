@@ -1,0 +1,11 @@
+
+--logstadsh安装插件命令
+   --logstash-plugin install logstash-codec-json_lines
+   
+   
+   
+--启动
+  --logstash -f logstash-apache.conf
+  
+--查询插件命令
+  --logstash-codec-json_lines
